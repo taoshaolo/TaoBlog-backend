@@ -1,6 +1,7 @@
 package com.taoshao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.entity.User;
 
 
@@ -12,5 +13,10 @@ import com.taoshao.domain.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * 用户信息
+     * @return
+     */
+    ResponseResult userInfo();
 }
 
