@@ -19,4 +19,8 @@ public class SystemConstants {
      */
     public static final String LINK_STATUS_NORMAL = "0";
 
+    /**
+     * 根评论  -1
+     */
+    public static final long ROOT_COMMENT = -1;
 }

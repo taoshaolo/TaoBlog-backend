@@ -1,6 +1,6 @@
 package com.taoshao.service.impl;
 
-import com.taoshao.config.RedisCache;
+import com.taoshao.utils.RedisCache;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.entity.LoginUser;
 import com.taoshao.domain.entity.User;
@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -44,12 +44,25 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         String userId = loginUser.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
         //把用户信息存入 redis
-        redisCache.setCacheObject("bloglogin:" + userId,loginUser);
+        redisCache.setCacheObject("bloglogin:" + userId, loginUser);
 
         //把 User 转换成 UserInfoVo
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         //把 token和 userinfo 封装返回
-        BlogUserLoginVo vo = new BlogUserLoginVo(jwt,userInfoVo);
+        BlogUserLoginVo vo = new BlogUserLoginVo(jwt, userInfoVo);
         return ResponseResult.okResult(vo);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取 token 解析获取 userId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //获取 userId
+        Long userId = loginUser.getUser().getId();
+        //删除 redis 中的用户信息
+        redisCache.deleteObject("bloglogin:" + userId);
+        return ResponseResult.okResult();
     }
 }

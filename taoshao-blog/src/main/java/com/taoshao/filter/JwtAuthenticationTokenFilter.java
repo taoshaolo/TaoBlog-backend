@@ -1,11 +1,13 @@
 package com.taoshao.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.taoshao.config.RedisCache;
-import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.entity.LoginUser;
+import com.taoshao.utils.RedisCache;
+import com.taoshao.domain.ResponseResult;
+
 import com.taoshao.domain.enums.AppHttpCodeEnum;
 import com.taoshao.utils.JwtUtil;
+
 import com.taoshao.utils.WebUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +58,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         String userId = claims.getSubject();
         //从 redis 中获取用户信息
-        Object cacheObject = redisCache.getCacheObject("bloglogin:" + userId);
+//        Object loginUser = redisCache.getCacheObject("bloglogin:" + userId);
 
+        String json = redisCache.getCacheObject("bloglogin:" + userId).toString();
+        LoginUser loginUser = JSON.parseObject(json, LoginUser.class);
+//        LoginUser loginUser = redisCache.getCacheObject("bloglogin:" + userId);
 
         //如果获取不到
-        if (Objects.isNull(cacheObject)) {
+        if (Objects.isNull(loginUser)) {
             //说明登录过期 提示重新登录
             ResponseResult result =
                     ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
@@ -69,7 +74,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         //存入 SecurityContextHolder
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(cacheObject, null, null);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);

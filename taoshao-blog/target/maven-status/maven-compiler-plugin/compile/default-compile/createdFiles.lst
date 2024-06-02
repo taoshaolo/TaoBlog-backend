@@ -4,4 +4,5 @@ com\taoshao\filter\JwtAuthenticationTokenFilter.class
 com\taoshao\TaoShaoBlogApplication.class
 com\taoshao\controller\ArticleController.class
 com\taoshao\controller\LinkController.class
+com\taoshao\controller\CommentController.class
 com\taoshao\controller\BlogLoginController.class
