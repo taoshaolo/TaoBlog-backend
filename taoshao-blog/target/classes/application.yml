@@ -23,3 +23,8 @@ mybatis-plus:
     logic-delete-value: 1
     logic-not-delete-value: 0
     id-type: auto
+
+oss:
+  accessKey: 9dpZWcnarvH5aTMNwx8zBvWv71iefvNbCwUPLW9J
+  secretKey: uw4xW9_fOVAYY42Zoe2xYl-r279OwPJMdsn2Ix-k
+  bucket: taoshao-blog
