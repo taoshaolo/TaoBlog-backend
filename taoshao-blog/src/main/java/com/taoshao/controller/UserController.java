@@ -1,11 +1,10 @@
 package com.taoshao.controller;
 
 import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.entity.User;
 import com.taoshao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author taoshao
@@ -22,4 +21,11 @@ public class UserController {
     public ResponseResult userInfo(){
         return userService.userInfo();
     }
+
+    @PutMapping("/userInfo")
+    public ResponseResult updateUserInfo(@RequestBody User user){
+        return userService.updateUserInfo(user);
+    }
+
+    
 }
