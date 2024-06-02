@@ -1,5 +1,6 @@
 package com.taoshao.controller;
 
+import com.taoshao.annotation.SystemLog;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.entity.User;
 import com.taoshao.service.UserService;
@@ -23,6 +24,7 @@ public class UserController {
     }
 
     @PutMapping("/userInfo")
+    @SystemLog(businessName = "更新用户信息")
     public ResponseResult updateUserInfo(@RequestBody User user){
         return userService.updateUserInfo(user);
     }
