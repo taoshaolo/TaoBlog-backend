@@ -1,8 +1,10 @@
 package com.taoshao.domain.entity;
 
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,13 +31,15 @@ public class Category {
     private String description;
     //状态0:正常,1禁用
     private String status;
-    
+
     private Long createBy;
-    
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    
+
     private Long updateBy;
-    
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
