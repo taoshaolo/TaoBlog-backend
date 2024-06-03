@@ -14,6 +14,7 @@ import com.taoshao.mapper.ArticleMapper;
 import com.taoshao.service.ArticleService;
 import com.taoshao.service.CategoryService;
 import com.taoshao.utils.BeanCopyUtils;
+import com.taoshao.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.taoshao.constants.RedisConstants.ARTICLE_VIEWCOUNT_KEY;
 import static com.taoshao.constants.SystemConstants.ARTICLE_STATUS_NORMAL;
 
 /**
@@ -32,6 +34,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private RedisCache redisCache;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -118,4 +123,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //封装响应返回
         return ResponseResult.okResult(articleDetailVo);
     }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        //更新 redis 中对应 id 的浏览量
+        redisCache.incrementCacheMapValue(ARTICLE_VIEWCOUNT_KEY,id.toString(),1);
+        return ResponseResult.okResult();
+    }
+
+
 }

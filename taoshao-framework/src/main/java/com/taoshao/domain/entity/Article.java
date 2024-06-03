@@ -53,17 +53,21 @@ public class Article {
     private Long viewCount;
     //是否允许评论 1是，0否
     private String isComment;
-    
+
     private Long createBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    
+
     private Long updateBy;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
 
+    public Article(Long id, long viewCount) {
+        this.id = id;
+        this.viewCount = viewCount;
+    }
 }
 

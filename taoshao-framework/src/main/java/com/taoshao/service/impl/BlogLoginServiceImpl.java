@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+import static com.taoshao.constants.RedisConstants.BLOG_LOGIN_KEY;
+
 /**
  * @Author taoshao
  * @Date 2024/5/30
@@ -44,7 +46,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         String userId = loginUser.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
         //把用户信息存入 redis
-        redisCache.setCacheObject("bloglogin:" + userId, loginUser);
+        redisCache.setCacheObject(BLOG_LOGIN_KEY + userId, loginUser);
 
         //把 User 转换成 UserInfoVo
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
@@ -62,7 +64,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         //获取 userId
         Long userId = loginUser.getUser().getId();
         //删除 redis 中的用户信息
-        redisCache.deleteObject("bloglogin:" + userId);
+        redisCache.deleteObject(BLOG_LOGIN_KEY + userId);
         return ResponseResult.okResult();
     }
 }
