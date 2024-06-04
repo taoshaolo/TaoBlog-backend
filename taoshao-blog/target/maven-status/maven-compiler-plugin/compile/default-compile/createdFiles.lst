@@ -6,6 +6,7 @@ com\taoshao\job\TestJob.class
 com\taoshao\config\SecurityConfig.class
 com\taoshao\controller\CategoryController.class
 com\taoshao\controller\UploadController.class
+com\taoshao\job\UpdateViewCountJob.class
 com\taoshao\runner\ViewCountRunner.class
 com\taoshao\TaoShaoBlogApplication.class
 com\taoshao\controller\ArticleController.class

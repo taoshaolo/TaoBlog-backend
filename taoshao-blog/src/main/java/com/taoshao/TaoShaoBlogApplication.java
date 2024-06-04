@@ -14,6 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class TaoShaoBlogApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TaoShaoBlogApplication.class,args);
+        SpringApplication.run(TaoShaoBlogApplication.class, args);
     }
 }

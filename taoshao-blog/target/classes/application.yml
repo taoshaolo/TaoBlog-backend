@@ -28,3 +28,13 @@ oss:
   accessKey: 9dpZWcnarvH5aTMNwx8zBvWv71iefvNbCwUPLW9J
   secretKey: uw4xW9_fOVAYY42Zoe2xYl-r279OwPJMdsn2Ix-k
   bucket: taoshao-blog
+# 接口文档配置
+springdoc:
+  group-configs:
+    - group: 'default'
+      packages-to-scan: com.taoshao.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
