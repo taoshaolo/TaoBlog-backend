@@ -26,7 +26,7 @@ import static com.taoshao.domain.enums.AppHttpCodeEnum.CONTENT_NOT_NULL;
 /**
  * 评论表(Comment)表服务实现类
  *
- * @author makejava
+ * @author taoshao
  * @since 2024-06-01 17:11:46
  */
 @Service

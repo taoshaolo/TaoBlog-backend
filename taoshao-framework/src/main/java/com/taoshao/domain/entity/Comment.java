@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 /**
  * 评论表(Comment)表实体类
  *
- * @author makejava
+ * @author taoshao
  * @since 2024-06-01 17:11:38
  */
 @Data

@@ -8,7 +8,7 @@ import com.taoshao.domain.entity.Comment;
 /**
  * 评论表(Comment)表服务接口
  *
- * @author makejava
+ * @author taoshao
  * @since 2024-06-01 17:11:39
  */
 public interface CommentService extends IService<Comment> {
