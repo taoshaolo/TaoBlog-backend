@@ -1,7 +1,10 @@
 package com.taoshao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.TagListDto;
 import com.taoshao.domain.entity.Tag;
+import com.taoshao.domain.vo.PageVo;
 
 
 /**
@@ -11,6 +14,13 @@ import com.taoshao.domain.entity.Tag;
  * @since 2024-06-04 20:41:29
  */
 public interface TagService extends IService<Tag> {
-
+    /**
+     * 分页查询标签列表
+     * @param pageNum
+     * @param pageSize
+     * @param tagListDto
+     * @return
+     */
+    ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
 }
 

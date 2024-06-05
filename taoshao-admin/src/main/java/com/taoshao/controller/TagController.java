@@ -1,9 +1,12 @@
 package com.taoshao.controller;
 
 import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.TagListDto;
+import com.taoshao.domain.vo.PageVo;
 import com.taoshao.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +22,7 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping("/list")
-    public ResponseResult list(){
-        return ResponseResult.okResult(tagService.list());
+    public ResponseResult<PageVo> list(Integer pageNum, Integer pageSize, TagListDto tagListDto){
+        return tagService.pageTagList(pageNum,pageSize,tagListDto);
     }
 }
