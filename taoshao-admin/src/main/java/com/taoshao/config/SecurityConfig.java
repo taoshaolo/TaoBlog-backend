@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login").anonymous()
 //                //需要认证才能访问
                 .antMatchers("/content/tag/list").authenticated()
+                .antMatchers("/user/logout").authenticated()
 //                .antMatchers("/user/userInfo").authenticated()
                 // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();
@@ -57,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
                         .authenticationEntryPoint(authenticationEntryPoint)
                                 .accessDeniedHandler(accessDeniedHandler);
-
+        //关闭默认的注销功能
         http.logout().disable();
 
         //把 jwtAuthenticationTokenFilter 添加到 SpringSecurity 的过滤器链中

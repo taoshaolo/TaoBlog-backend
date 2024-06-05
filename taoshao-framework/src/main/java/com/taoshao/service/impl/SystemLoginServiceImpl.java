@@ -6,10 +6,12 @@ import com.taoshao.domain.entity.User;
 import com.taoshao.service.LoginService;
 import com.taoshao.utils.JwtUtil;
 import com.taoshao.utils.RedisCache;
+import com.taoshao.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -47,9 +49,18 @@ public class SystemLoginServiceImpl implements LoginService {
         redisCache.setCacheObject(LOGIN_KEY + userId, loginUser);
 
         //把 token 封装返回
-        Map<String,String> map = new HashMap<>();
-        map.put("token",jwt);
+        Map<String, String> map = new HashMap<>();
+        map.put("token", jwt);
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取 userId
+        Long userId = SecurityUtils.getUserId();
+        //删除redis中的用户信息
+        redisCache.deleteObject(LOGIN_KEY + userId);
+        return ResponseResult.okResult();
     }
 
 }
