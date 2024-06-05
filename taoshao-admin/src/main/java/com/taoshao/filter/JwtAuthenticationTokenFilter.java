@@ -22,8 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.taoshao.constants.RedisConstants.BLOG_ADMIN_LOGIN_KEY;
-import static com.taoshao.constants.RedisConstants.BLOG_LOGIN_KEY;
+import static com.taoshao.constants.RedisConstants.LOGIN_KEY;
 
 /**
  * @Author taoshao
@@ -59,9 +58,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         String userId = claims.getSubject();
         //从 redis 中获取用户信息
-        String json = redisCache.getCacheObject(BLOG_ADMIN_LOGIN_KEY + userId).toString();
+        String json = redisCache.getCacheObject(LOGIN_KEY + userId).toString();
         LoginUser loginUser = JSON.parseObject(json, LoginUser.class);
-//        LoginUser loginUser = redisCache.getCacheObject("bloglogin:" + userId);
 
         //如果获取不到
         if (Objects.isNull(loginUser)) {

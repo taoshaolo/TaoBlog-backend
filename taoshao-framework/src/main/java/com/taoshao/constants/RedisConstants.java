@@ -19,5 +19,5 @@ public class RedisConstants {
     /**
      * 博客后台登录键
      */
-    public static final String BLOG_ADMIN_LOGIN_KEY = "blog:admin:login:";
+    public static final String LOGIN_KEY = "login:";
 }
