@@ -1,14 +1,13 @@
 package com.taoshao.controller;
 
 import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.dto.TagListDto;
+import com.taoshao.domain.entity.Tag;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author taoshao
@@ -24,5 +23,10 @@ public class TagController {
     @GetMapping("/list")
     public ResponseResult<PageVo> list(Integer pageNum, Integer pageSize, TagListDto tagListDto){
         return tagService.pageTagList(pageNum,pageSize,tagListDto);
+    }
+
+    @PostMapping("/content/tag")
+    public ResponseResult addTag(@RequestBody TagDto tagDto){
+        return tagService.addTag(tagDto);
     }
 }
