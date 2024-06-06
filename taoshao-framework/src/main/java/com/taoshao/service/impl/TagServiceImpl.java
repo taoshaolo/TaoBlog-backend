@@ -3,13 +3,12 @@ package com.taoshao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.dto.TagListDto;
+import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.entity.ArticleTag;
 import com.taoshao.domain.entity.Tag;
-import com.taoshao.domain.enums.AppHttpCodeEnum;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.domain.vo.TagVo;
 import com.taoshao.exception.SystemException;
@@ -18,13 +17,11 @@ import com.taoshao.mapper.ArticleTagMapper;
 import com.taoshao.mapper.TagMapper;
 import com.taoshao.service.TagService;
 import com.taoshao.utils.BeanCopyUtils;
-import com.taoshao.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,7 +70,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public ResponseResult addTag(TagDto tagDto) {
         LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Tag::getName,tagDto.getName());
+        queryWrapper.eq(Tag::getName, tagDto.getName());
         // 检查数据库中是否已经存在相同名称的标签
         int count = this.count(queryWrapper);
         if (count > 0){
@@ -108,6 +105,21 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         tagMapper.deleteById(id);
 
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public TagVo getTagById(Long id) {
+        Tag tag = getById(id);
+        TagVo tagVo = BeanCopyUtils.copyBean(tag, TagVo.class);
+        return tagVo;
+    }
+
+    @Override
+    public ResponseResult updateTag(TagDto tagDto) {
+        Tag tag = BeanCopyUtils.copyBean(tagDto, Tag.class);
+        //修改标签
+        boolean result = updateById(tag);
+        return ResponseResult.okResult(result);
     }
 }
 

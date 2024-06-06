@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.dto.TagListDto;
+import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.entity.Tag;
 import com.taoshao.domain.vo.PageVo;
+import com.taoshao.domain.vo.TagVo;
 
 
 /**
@@ -37,5 +39,19 @@ public interface TagService extends IService<Tag> {
      * @return
      */
     ResponseResult deleteTagById(Long id);
+
+    /**
+     * 根据id查询标签
+     * @param id
+     * @return
+     */
+    TagVo getTagById(Long id);
+
+    /**
+     * 修改标签
+     * @param tagDto
+     * @return
+     */
+    ResponseResult updateTag(TagDto tagDto);
 }
 
