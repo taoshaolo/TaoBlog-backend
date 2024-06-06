@@ -50,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                //需要认证才能访问
                 .antMatchers("/content/tag/list").authenticated()
                 .antMatchers("/user/logout").authenticated()
+                .antMatchers("/content/tag").authenticated()
+                .antMatchers("/content/tag/{id}").authenticated()
 //                .antMatchers("/user/userInfo").authenticated()
                 // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();

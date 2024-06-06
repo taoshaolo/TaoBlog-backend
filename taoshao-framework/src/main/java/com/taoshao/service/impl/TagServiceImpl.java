@@ -7,23 +7,28 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.dto.TagListDto;
+import com.taoshao.domain.entity.ArticleTag;
 import com.taoshao.domain.entity.Tag;
 import com.taoshao.domain.enums.AppHttpCodeEnum;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.domain.vo.TagVo;
 import com.taoshao.exception.SystemException;
+import com.taoshao.mapper.ArticleMapper;
+import com.taoshao.mapper.ArticleTagMapper;
 import com.taoshao.mapper.TagMapper;
 import com.taoshao.service.TagService;
 import com.taoshao.utils.BeanCopyUtils;
 import com.taoshao.utils.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.taoshao.domain.enums.AppHttpCodeEnum.TAG_EXIST;
+import static com.taoshao.domain.enums.AppHttpCodeEnum.*;
 
 /**
  * 标签(Tag)表服务实现类
@@ -33,6 +38,13 @@ import static com.taoshao.domain.enums.AppHttpCodeEnum.TAG_EXIST;
  */
 @Service
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
+
+    @Autowired
+    private TagMapper tagMapper;
+    @Autowired
+    private ArticleMapper articleMapper;
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
 
     @Override
     public ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto) {
@@ -72,6 +84,29 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         // 如果不存在相同名称的标签，复制 DTO 到实体并保存
         Tag tag = BeanCopyUtils.copyBean(tagDto, Tag.class);
         save(tag);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseResult deleteTagById(Long id) {
+
+        //检查标签是否存在
+        Tag tag = tagMapper.selectById(id);
+        if (tag == null){
+            throw new SystemException(TAG_NOT_EXIST);
+        }
+        // 检查是否有文章关联到这个标签
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getTagId,id);
+        Integer count = articleTagMapper.selectCount(queryWrapper);
+        if (count > 0){
+            // 如果有关联的文章，则不能删除
+            throw new SystemException(TAG_IN_USE);
+        }
+        // 如果没有关联的文章，则删除标签
+        tagMapper.deleteById(id);
+
         return ResponseResult.okResult();
     }
 }

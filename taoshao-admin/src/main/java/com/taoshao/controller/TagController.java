@@ -25,8 +25,13 @@ public class TagController {
         return tagService.pageTagList(pageNum,pageSize,tagListDto);
     }
 
-    @PostMapping("/content/tag")
+    @PostMapping
     public ResponseResult addTag(@RequestBody TagDto tagDto){
         return tagService.addTag(tagDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteTagById(@PathVariable Long id){
+        return tagService.deleteTagById(id);
     }
 }
