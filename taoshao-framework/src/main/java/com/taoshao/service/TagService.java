@@ -9,6 +9,8 @@ import com.taoshao.domain.entity.Tag;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.domain.vo.TagVo;
 
+import java.util.List;
+
 
 /**
  * 标签(Tag)表服务接口
@@ -53,5 +55,11 @@ public interface TagService extends IService<Tag> {
      * @return
      */
     ResponseResult updateTag(TagDto tagDto);
+
+    /**
+     * 查询所有标签
+     * @return
+     */
+    List<TagVo> listAllTag();
 }
 

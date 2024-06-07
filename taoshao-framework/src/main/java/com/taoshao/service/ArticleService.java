@@ -2,6 +2,7 @@ package com.taoshao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.AddArticleDto;
 import com.taoshao.domain.entity.Article;
 
 /**
@@ -38,4 +39,11 @@ public interface ArticleService extends IService<Article> {
      * @return
      */
     ResponseResult updateViewCount(Long id);
+
+    /**
+     * 添加博文
+     * @param addArticleDto
+     * @return
+     */
+    ResponseResult add(AddArticleDto addArticleDto);
 }

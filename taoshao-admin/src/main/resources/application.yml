@@ -30,3 +30,7 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+oss:
+  accessKey: 9dpZWcnarvH5aTMNwx8zBvWv71iefvNbCwUPLW9J
+  secretKey: uw4xW9_fOVAYY42Zoe2xYl-r279OwPJMdsn2Ix-k
+  bucket: taoshao-blog

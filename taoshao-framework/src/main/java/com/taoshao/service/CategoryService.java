@@ -3,6 +3,9 @@ package com.taoshao.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.entity.Category;
+import com.taoshao.domain.vo.CategoryVo;
+
+import java.util.List;
 
 
 /**
@@ -19,5 +22,11 @@ public interface CategoryService extends IService<Category> {
      */
     ResponseResult getCategoryList();
 
+
+    /**
+     * 查询所有分类
+     * @return
+     */
+    List<CategoryVo> listAllCategory();
 }
 

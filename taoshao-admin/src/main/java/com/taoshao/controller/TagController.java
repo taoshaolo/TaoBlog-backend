@@ -10,6 +10,8 @@ import com.taoshao.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author taoshao
  * @Date 2024/6/4
@@ -44,5 +46,11 @@ public class TagController {
     @PutMapping
     public ResponseResult updateTag(@RequestBody TagDto tagDto){
         return tagService.updateTag(tagDto);
+    }
+
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        List<TagVo> list = tagService.listAllTag();
+        return ResponseResult.okResult(list);
     }
 }

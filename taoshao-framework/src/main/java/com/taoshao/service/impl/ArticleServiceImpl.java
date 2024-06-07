@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.AddArticleDto;
 import com.taoshao.domain.entity.Article;
+import com.taoshao.domain.entity.ArticleTag;
 import com.taoshao.domain.entity.Category;
 import com.taoshao.domain.vo.ArticleDetailVo;
 import com.taoshao.domain.vo.ArticleListVo;
@@ -12,6 +14,7 @@ import com.taoshao.domain.vo.HotArticleVo;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.mapper.ArticleMapper;
 import com.taoshao.service.ArticleService;
+import com.taoshao.service.ArticleTagService;
 import com.taoshao.service.CategoryService;
 import com.taoshao.utils.BeanCopyUtils;
 import com.taoshao.utils.RedisCache;
@@ -34,6 +37,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ArticleTagService articleTagService;
 
     @Autowired
     private RedisCache redisCache;
@@ -134,5 +140,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return ResponseResult.okResult();
     }
 
-
+    @Override
+    public ResponseResult add(AddArticleDto addArticleDto) {
+        //添加 博客
+        Article article = BeanCopyUtils.copyBean(addArticleDto, Article.class);
+        save(article);
+        List<ArticleTag> articleTags = addArticleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+        //添加 博客和标签的关联
+        articleTagService.saveBatch(articleTags);
+        return ResponseResult.okResult();
+    }
 }
