@@ -20,12 +20,9 @@ public class UploadController {
     private UploadService uploadService;
 
     @PostMapping("/upload")
-    public ResponseResult uploadImg(@RequestParam("img")MultipartFile multipartFile){
-        try {
-            return uploadService.uploadImg(multipartFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("文件上传失败");
-        }
+    public ResponseResult uploadImg(@RequestParam("img") MultipartFile multipartFile) {
+
+        return uploadService.uploadImg(multipartFile);
+
     }
 }

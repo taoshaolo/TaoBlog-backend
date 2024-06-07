@@ -3,7 +3,11 @@ package com.taoshao.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.AddArticleDto;
+import com.taoshao.domain.dto.ArticleListDto;
+import com.taoshao.domain.dto.UpdateArticleDto;
 import com.taoshao.domain.entity.Article;
+import com.taoshao.domain.vo.ArticleVo;
+import com.taoshao.domain.vo.PageVo;
 
 /**
  * @Author taoshao
@@ -46,4 +50,35 @@ public interface ArticleService extends IService<Article> {
      * @return
      */
     ResponseResult add(AddArticleDto addArticleDto);
+
+    /**
+     * 分页查询文章列表w
+     * @param pageNum
+     * @param pageSize
+     * @param articleListDto
+     * @return
+     */
+    PageVo pageArticleList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto);
+
+    /**
+     * 查询文章详情
+     * @param id
+     * @return
+     */
+    ArticleVo getArticleById(Long id);
+
+    /**
+     * 更新文章
+     *
+     * @param updateArticleDto
+     * @return
+     */
+    ResponseResult updateArticle(UpdateArticleDto updateArticleDto);
+
+    /**
+     * 删除文章
+     * @param id
+     * @return
+     */
+    ResponseResult delete(Long id);
 }

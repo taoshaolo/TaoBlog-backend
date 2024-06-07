@@ -1,6 +1,4 @@
-package com.taoshao.domain.entity;
-
-import java.util.Date;
+package com.taoshao.domain.dto;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,33 +8,40 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.util.Date;
+import java.util.List;
 
 /**
- * 评论表(Comment)表实体类
+ * 文章表(Article)Dto
  *
  * @author taoshao
- * @since 2024-06-01 17:11:38
+ * @since 2024-05-29 19:48:03
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("tao_comment")
-public class Comment {
-    @TableId
+public class UpdateArticleDto {
     private Long id;
-    //评论类型（0代表文章评论，1代表友链评论）
-    private String type;
-    //文章id
-    private Long articleId;
-    //根评论id
-    private Long rootId;
-    //评论内容
+    //标题
+    private String title;
+    //文章内容
     private String content;
-    //所回复的目标评论的userid
-    private Long toCommentUserId;
-    //回复目标评论id
-    private Long toCommentId;
-
+    //文章摘要
+    private String summary;
+    //所属分类id
+    private Long categoryId;
+    //缩略图
+    private String thumbnail;
+    //是否置顶（0否，1是）
+    private String isTop;
+    //状态（0已发布，1草稿）
+    private String status;
+    //访问量
+    private Long viewCount;
+    //是否允许评论 1是，0否
+    private String isComment;
     @TableField(fill = FieldFill.INSERT)
     private Long createBy;
     @TableField(fill = FieldFill.INSERT)
@@ -47,8 +52,10 @@ public class Comment {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
-    //删除标志（0 代表未删除，1 代表已删除）
+    //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
+
+    private List<Long> tags;
 
 }
 
