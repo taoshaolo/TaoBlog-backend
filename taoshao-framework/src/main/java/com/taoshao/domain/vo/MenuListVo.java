@@ -1,5 +1,6 @@
 package com.taoshao.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
  * @author taoshao
  * @since 2024-06-05 10:53:58
  */
@@ -47,6 +47,10 @@ public class MenuListVo {
     private String icon;
     //备注
     private String remark;
+    //创建时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
 
 }
 

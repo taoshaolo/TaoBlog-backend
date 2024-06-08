@@ -8,43 +8,33 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 /**
- * 文章表(Article)表Vo
  *
  * @author taoshao
- * @since 2024-05-29 19:48:03
+ * @since 2024-06-05 10:59:26
  */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageArticleListVo {
-
+public class PageRoleListVo {
+    //角色ID
     private Long id;
-    //标题
-    private String title;
-    //文章内容
-    private String content;
-    //文章摘要
-    private String summary;
-    //所属分类id
-    private Long categoryId;
-
-    //缩略图
-    private String thumbnail;
-    //是否置顶（0否，1是）
-    private String isTop;
-    //状态（0已发布，1草稿）
+    //角色名称
+    private String roleName;
+    //角色权限字符串
+    private String roleKey;
+    //显示顺序
+    private Integer roleSort;
+    //角色状态（0正常 1停用）
     private String status;
-    //访问量
-    private Long viewCount;
-    //是否允许评论 1是，0否
-    private String isComment;
+    //创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
+
 }
 

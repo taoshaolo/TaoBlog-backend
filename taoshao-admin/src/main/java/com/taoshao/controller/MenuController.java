@@ -4,8 +4,11 @@ import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.MenuListDto;
 import com.taoshao.domain.entity.Menu;
 import com.taoshao.domain.vo.MenuListVo;
+import com.taoshao.domain.vo.MenuTreeVo;
 import com.taoshao.domain.vo.MenuVo;
+import com.taoshao.domain.vo.RoleMenuTreeVo;
 import com.taoshao.service.MenuService;
+import com.taoshao.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,4 +51,18 @@ public class MenuController {
     public ResponseResult delete(@PathVariable Long id){
         return menuService.delete(id);
     }
+
+    @GetMapping("/treeselect")
+    public ResponseResult<List<MenuTreeVo>> treeSelect(){
+        List<MenuTreeVo> menuTreeVos = menuService.treeSelect();
+       return ResponseResult.okResult(menuTreeVos);
+    }
+
+    @GetMapping("/roleMenuTreeselect/{id}")
+    public ResponseResult<RoleMenuTreeVo> roleMenuTreeSelectById(@PathVariable Long id){
+        RoleMenuTreeVo roleMenuTreeVos = menuService.roleMenuTreeSelectById(id);
+        return ResponseResult.okResult(roleMenuTreeVos);
+    }
+
+
 }

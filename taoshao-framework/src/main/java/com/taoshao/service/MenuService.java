@@ -5,7 +5,9 @@ import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.MenuListDto;
 import com.taoshao.domain.entity.Menu;
 import com.taoshao.domain.vo.MenuListVo;
+import com.taoshao.domain.vo.MenuTreeVo;
 import com.taoshao.domain.vo.MenuVo;
+import com.taoshao.domain.vo.RoleMenuTreeVo;
 
 import java.util.List;
 
@@ -66,5 +68,20 @@ public interface MenuService extends IService<Menu> {
      * @return
      */
     ResponseResult delete(Long id);
+
+    /**
+     * 获取菜单树
+     *
+     * @return
+     */
+    List<MenuTreeVo> treeSelect();
+
+    /**
+     * 加载对应角色菜单列表树
+     *
+     * @param id
+     * @return
+     */
+    RoleMenuTreeVo roleMenuTreeSelectById(Long id);
 }
 
