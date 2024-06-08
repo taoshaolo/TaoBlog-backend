@@ -1,7 +1,11 @@
 package com.taoshao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.MenuListDto;
 import com.taoshao.domain.entity.Menu;
+import com.taoshao.domain.vo.MenuListVo;
+import com.taoshao.domain.vo.MenuVo;
 
 import java.util.List;
 
@@ -26,5 +30,41 @@ public interface MenuService extends IService<Menu> {
      * @return
      */
     List<Menu> selectRouterMenuTreeByUserId(Long userId);
+
+    /**
+     * 菜单列表
+     *
+     * @param menuListDto
+     * @return
+     */
+    List<MenuListVo> menuList(MenuListDto menuListDto);
+
+    /**
+     * 添加菜单
+     * @param menu
+     * @return
+     */
+    ResponseResult add(Menu menu);
+
+    /**
+     * 根据id查询菜单
+     * @param id
+     * @return
+     */
+    MenuVo getMenuById(Long id);
+
+    /**
+     * 更新菜单
+     * @param menu
+     * @return
+     */
+    ResponseResult updateMenu(Menu menu);
+
+    /**
+     * 删除菜单
+     * @param id
+     * @return
+     */
+    ResponseResult delete(Long id);
 }
 

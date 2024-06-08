@@ -2,16 +2,26 @@ package com.taoshao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.taoshao.domain.ResponseResult;
+import com.taoshao.domain.dto.MenuListDto;
 import com.taoshao.domain.entity.Menu;
+import com.taoshao.domain.enums.AppHttpCodeEnum;
+import com.taoshao.domain.vo.MenuListVo;
+import com.taoshao.domain.vo.MenuVo;
+import com.taoshao.exception.SystemException;
 import com.taoshao.mapper.MenuMapper;
 import com.taoshao.service.MenuService;
+import com.taoshao.utils.BeanCopyUtils;
 import com.taoshao.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.taoshao.constants.SystemConstants.*;
+import static com.taoshao.domain.enums.AppHttpCodeEnum.MENU_NOT_EXIST;
+import static com.taoshao.domain.enums.AppHttpCodeEnum.SYSTEM_ERROR;
 
 /**
  * 菜单权限表(Menu)表服务实现类
@@ -80,6 +90,57 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .map(m->m.setChildren(getChildren(m,menus)))
                 .collect(Collectors.toList());
         return childrenList;
+    }
+
+    @Override
+    public List<MenuListVo> menuList(MenuListDto menuListDto) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StringUtils.hasText(menuListDto.getStatus()),Menu::getStatus,menuListDto.getStatus());
+        queryWrapper.eq(StringUtils.hasText(menuListDto.getMenuName()),Menu::getMenuName,menuListDto.getMenuName());
+
+        List<Menu> list = list(queryWrapper);
+        List<MenuListVo> menuListVos = BeanCopyUtils.copyBeanList(list, MenuListVo.class);
+        return menuListVos;
+    }
+
+    @Override
+    public ResponseResult add(Menu menu) {
+        save(menu);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public MenuVo getMenuById(Long id) {
+        Menu menu = getById(id);
+        if (menu == null){
+            throw new SystemException(MENU_NOT_EXIST);
+        }
+        MenuVo menuVo = BeanCopyUtils.copyBean(menu, MenuVo.class);
+        return menuVo;
+    }
+
+    @Override
+    public ResponseResult updateMenu(Menu menu) {
+        //检查父菜单ID是否与当前菜单ID相同，不能把父菜单设置为当前菜单
+        if (menu.getParentId().equals(menu.getId())){
+            return ResponseResult.errorResult(SYSTEM_ERROR,"修改菜单失败，上级菜单不能选择自己");
+        }
+        updateById(menu);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult delete(Long id) {
+        //要删除的菜单有子菜单,则不能删除
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getParentId,id);
+        int count = count(queryWrapper);
+        if (count > 0){
+            return ResponseResult.errorResult(SYSTEM_ERROR,"存在子菜单不允许删除");
+        }
+        //没有,可以删除
+        removeById(id);
+        return ResponseResult.okResult();
     }
 }
 
