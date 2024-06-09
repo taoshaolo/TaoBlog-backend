@@ -14,6 +14,7 @@ import com.taoshao.domain.entity.Category;
 import com.taoshao.domain.enums.AppHttpCodeEnum;
 import com.taoshao.domain.vo.CategoryVo;
 import com.taoshao.domain.vo.GetCategoryVo;
+import com.taoshao.domain.vo.PageCategoryListVo;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.exception.SystemException;
 import com.taoshao.mapper.CategoryMapper;
@@ -95,13 +96,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         //分页查询方法
         //把 Category 封装成 CategoryVo
-        List<CategoryVo> categoryVos = page(page, queryWrapper)
+        List<PageCategoryListVo> pageCategoryListVos = page(page, queryWrapper)
                 .getRecords()
                 .stream()
-                .map(category -> BeanCopyUtils.copyBean(category, CategoryVo.class))
+                .map(category -> BeanCopyUtils.copyBean(category, PageCategoryListVo.class))
                 .collect(Collectors.toList());
 
-        PageVo pageVo = new PageVo(categoryVos, page.getTotal());
+        PageVo pageVo = new PageVo(pageCategoryListVos, page.getTotal());
         return pageVo;
     }
 
