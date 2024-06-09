@@ -70,5 +70,12 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     ResponseResult delete(Long id);
+
+    /**
+     * 列出所有角色
+     *
+     * @return
+     */
+    List<Role> listAllRole();
 }
 

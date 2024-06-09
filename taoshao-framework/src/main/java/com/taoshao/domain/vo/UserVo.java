@@ -14,28 +14,30 @@ import java.util.Date;
 /**
  *
  * @author taoshao
- * @since 2024-06-05 10:59:26
+ * @since 2024-05-30 17:44:05
  */
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleVo {
-    //角色ID
+public class UserVo {
+    //主键
+    @TableId
     private Long id;
-    //角色名称
-    private String roleName;
-    //角色权限字符串
-    private String roleKey;
-    //显示顺序
-    private Integer roleSort;
-    //角色状态（0正常 1停用）
+    //用户名
+    private String userName;
+    //昵称
+    private String nickName;
+    //手机号
+    private String phonenumber;
+
+    //账号状态（0正常 1停用）
     private String status;
-    //创建时间
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime;
-    //备注
-    private String remark;
+    //邮箱
+    private String email;
+    //用户性别（0男，1女，2未知）
+    private String sex;
+    //头像
+
 }
 

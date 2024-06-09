@@ -5,11 +5,14 @@ import com.taoshao.domain.dto.AddRoleDto;
 import com.taoshao.domain.dto.RoleListDto;
 import com.taoshao.domain.dto.RoleStatusDto;
 import com.taoshao.domain.dto.UpdateRoleDto;
+import com.taoshao.domain.entity.Role;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.domain.vo.RoleVo;
 import com.taoshao.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author taoshao
@@ -52,6 +55,12 @@ public class RoleController {
     @DeleteMapping("/{id}")
     public ResponseResult delete(@PathVariable Long id) {
         return roleService.delete(id);
+    }
+
+    @GetMapping("/listAllRole")
+    public ResponseResult<List<Role>> listAllRole(){
+        List<Role> roles = roleService.listAllRole();
+        return ResponseResult.okResult(roles);
     }
 
 }

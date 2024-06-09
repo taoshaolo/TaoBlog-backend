@@ -12,7 +12,6 @@ import com.taoshao.domain.dto.UpdateRoleDto;
 import com.taoshao.domain.entity.Role;
 import com.taoshao.domain.entity.RoleMenu;
 import com.taoshao.domain.enums.AppHttpCodeEnum;
-import com.taoshao.domain.vo.MenuTreeVo;
 import com.taoshao.domain.vo.PageRoleListVo;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.domain.vo.RoleVo;
@@ -127,5 +126,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         removeById(id);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public List<Role> listAllRole() {
+        List<Role> list = list();
+        return list;
+    }
+
 }
 

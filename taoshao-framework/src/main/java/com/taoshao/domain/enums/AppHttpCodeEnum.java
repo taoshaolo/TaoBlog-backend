@@ -22,7 +22,8 @@ public enum AppHttpCodeEnum {
     TAG_EXIST(513,"标签已存在"),
     TAG_NOT_EXIST(514,"标签不存在"),
     TAG_IN_USE(515,"标签使用中"),
-    MENU_NOT_EXIST(515,"菜单不存在");
+    MENU_NOT_EXIST(515,"菜单不存在"),
+    NOT_DELETE(515,"不能删除自己");
 
     int code;
     String msg;

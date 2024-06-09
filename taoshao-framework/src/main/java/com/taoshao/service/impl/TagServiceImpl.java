@@ -6,13 +6,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.dto.TagListDto;
-import com.taoshao.domain.dto.TagDto;
 import com.taoshao.domain.entity.ArticleTag;
 import com.taoshao.domain.entity.Tag;
 import com.taoshao.domain.vo.PageVo;
 import com.taoshao.domain.vo.TagVo;
 import com.taoshao.exception.SystemException;
-import com.taoshao.mapper.ArticleMapper;
 import com.taoshao.mapper.ArticleTagMapper;
 import com.taoshao.mapper.TagMapper;
 import com.taoshao.service.TagService;
@@ -38,8 +36,6 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     @Autowired
     private TagMapper tagMapper;
-    @Autowired
-    private ArticleMapper articleMapper;
     @Autowired
     private ArticleTagMapper articleTagMapper;
 
