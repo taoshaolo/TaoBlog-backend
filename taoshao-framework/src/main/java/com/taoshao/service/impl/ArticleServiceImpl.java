@@ -10,16 +10,21 @@ import com.taoshao.domain.dto.UpdateArticleDto;
 import com.taoshao.domain.entity.Article;
 import com.taoshao.domain.entity.ArticleTag;
 import com.taoshao.domain.entity.Category;
+import com.taoshao.domain.enums.AppHttpCodeEnum;
 import com.taoshao.domain.vo.*;
+import com.taoshao.exception.SystemException;
 import com.taoshao.mapper.ArticleMapper;
 import com.taoshao.service.ArticleService;
 import com.taoshao.service.ArticleTagService;
 import com.taoshao.service.CategoryService;
 import com.taoshao.utils.BeanCopyUtils;
 import com.taoshao.utils.RedisCache;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -136,16 +141,45 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult updateViewCount(Long id) {
         //更新 redis 中对应 id 的浏览量
-        redisCache.incrementCacheMapValue(ARTICLE_VIEWCOUNT_KEY,id.toString(),1);
+        redisCache.incrementCacheMapValue(ARTICLE_VIEWCOUNT_KEY, id.toString(), 1);
         return ResponseResult.okResult();
     }
 
     @Override
+    @Transactional
     public ResponseResult add(AddArticleDto addArticleDto) {
+        //校验
+        if (addArticleDto == null) {
+            throw new SystemException(AppHttpCodeEnum.PARAMS_ERROR);
+        }
+        if (addArticleDto.getCategoryId() == null) {
+            throw new SystemException(AppHttpCodeEnum.CATEGORY_NOT_CAN_EMPTY);
+        }
+        String title = addArticleDto.getTitle();
+        String content = addArticleDto.getContent();
+        String summary = addArticleDto.getSummary();
+        List<Long> tags = addArticleDto.getTags();
+        String thumbnail = addArticleDto.getThumbnail();
+        if (CollectionUtils.isEmpty(tags)) {
+            throw new SystemException(AppHttpCodeEnum.TAGS_NOT_CAN_EMPTY);
+        }
+        if (StringUtils.isBlank(title)) {
+            throw new SystemException(AppHttpCodeEnum.TITLE_NOT_CAN_EMPTY);
+        }
+        if (StringUtils.isBlank(content)) {
+            throw new SystemException(AppHttpCodeEnum.ARTICLE_CONTENT_NOT_CAN_EMPTY);
+        }
+        if (StringUtils.isBlank(summary)) {
+            throw new SystemException(AppHttpCodeEnum.SUMMARY_NOT_CAN_EMPTY);
+        }
+        if (StringUtils.isBlank(thumbnail)) {
+            throw new SystemException(AppHttpCodeEnum.THUMBNAIL_NOT_CAN_EMPTY);
+        }
+
         //添加 博客
         Article article = BeanCopyUtils.copyBean(addArticleDto, Article.class);
         save(article);
-        List<ArticleTag> articleTags = addArticleDto.getTags().stream()
+        List<ArticleTag> articleTags = tags.stream()
                 .map(tagId -> new ArticleTag(article.getId(), tagId))
                 .collect(Collectors.toList());
         //添加 博客和标签的关联
@@ -157,8 +191,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public PageVo pageArticleList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(StringUtils.hasText(articleListDto.getTitle()),Article::getTitle,articleListDto.getTitle());
-        queryWrapper.like(StringUtils.hasText(articleListDto.getSummary()),Article::getSummary,articleListDto.getSummary());
+        queryWrapper.like(StringUtils.isNotBlank(articleListDto.getTitle()), Article::getTitle, articleListDto.getTitle());
+        queryWrapper.like(StringUtils.isNotBlank(articleListDto.getSummary()), Article::getSummary, articleListDto.getSummary());
 
         Page<Article> page = new Page<>();
         page.setCurrent(pageNum);
@@ -181,7 +215,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article article = getById(id);
         ArticleVo articleVo = BeanCopyUtils.copyBean(article, ArticleVo.class);
         LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ArticleTag::getArticleId,id);
+        queryWrapper.eq(ArticleTag::getArticleId, id);
         List<Long> tagIds = articleTagService.getBaseMapper().selectList(queryWrapper)
                 .stream()
                 .map(ArticleTag::getTagId)

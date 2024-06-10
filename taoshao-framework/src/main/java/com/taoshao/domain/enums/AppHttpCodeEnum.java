@@ -24,10 +24,16 @@ public enum AppHttpCodeEnum {
     TAG_IN_USE(515,"标签使用中"),
     MENU_NOT_EXIST(516,"菜单不存在"),
     NOT_DELETE(517,"不能删除自己"),
-    CATEGORY_NOT_NULL(519,"分类名称不能为空"),
-    CATEGORY_EXIST(519,"分类名称已存在"),
 
-    NOT_CAN_EMPTY(518,"参数不能为空");
+    CATEGORY_EXIST(520,"分类名称已存在"),
+    PARAMS_ERROR(521,"请求参数错误"),
+    CATEGORY_NOT_CAN_EMPTY(522,"分类不能为空"),
+    TITLE_NOT_CAN_EMPTY(523,"标题不能为空"),
+    ARTICLE_CONTENT_NOT_CAN_EMPTY(524,"文章内容不能为空"),
+    SUMMARY_NOT_CAN_EMPTY(525,"摘要不能为空"),
+    THUMBNAIL_NOT_CAN_EMPTY(526,"缩略图不能为空"),
+    TAGS_NOT_CAN_EMPTY(527,"标签不能为空");
+
 
     int code;
     String msg;

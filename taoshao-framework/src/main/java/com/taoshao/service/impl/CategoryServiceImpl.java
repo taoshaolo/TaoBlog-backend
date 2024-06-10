@@ -4,7 +4,6 @@ package com.taoshao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.taoshao.constants.SystemConstants;
 import com.taoshao.domain.ResponseResult;
 import com.taoshao.domain.dto.AddCategoryDto;
 import com.taoshao.domain.dto.CategoryListDto;
@@ -23,12 +22,10 @@ import com.taoshao.service.CategoryService;
 import com.taoshao.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.taoshao.constants.SystemConstants.ARTICLE_STATUS_NORMAL;
@@ -110,7 +107,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public ResponseResult add(AddCategoryDto addCategoryDto) {
         String name = addCategoryDto.getName();
         if (name == null){
-            throw new SystemException(AppHttpCodeEnum.NOT_CAN_EMPTY);
+            throw new SystemException(AppHttpCodeEnum.CATEGORY_NOT_CAN_EMPTY);
         }
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Category::getName,addCategoryDto.getName());
