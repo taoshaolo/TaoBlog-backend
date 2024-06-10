@@ -62,14 +62,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         page(page, queryWrapper);
 
         List<Article> articles = page.getRecords();
+        //从 redis 中获取 viewCount
+        for (Article article : articles) {
+            Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEWCOUNT_KEY, article.getId().toString());
+            article.setViewCount(viewCount.longValue());
+        }
 
-        //bean拷贝
-//        List<HotArticleVo> articleVos = new ArrayList<>();
-//        for (Article article : articles) {
-//            HotArticleVo vo = new HotArticleVo();
-//            BeanUtils.copyProperties(article, vo);
-//            articleVos.add(vo);
-//        }
         List<HotArticleVo> vs = BeanCopyUtils.copyBeanList(articles, HotArticleVo.class);
 
         return ResponseResult.okResult(vs);
@@ -85,32 +83,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         lambdaQueryWrapper.eq(Article::getStatus, ARTICLE_STATUS_NORMAL);
         //对 isTop 进行降序
         lambdaQueryWrapper.orderByDesc(Article::getIsTop);
+
         //分页查询
         Page<Article> page = new Page<>(pageNum, pageSize);
         page(page, lambdaQueryWrapper);
-
         List<Article> articles = page.getRecords();
+
+        //从 redis 中获取 viewCount
+        for (Article article : articles) {
+            Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEWCOUNT_KEY, article.getId().toString());
+            article.setViewCount(viewCount.longValue());
+        }
+
+
         //查询 categoryName
         articles.stream()
                 .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
                 .collect(Collectors.toList());
-        /* articles.stream()
-                .map(new Function<Article, Article>() {
-                    @Override
-                    public Article apply(Article article) {
-                        //查询分类id，查询分类信息，获取分类名称
-                        Category category = categoryService.getById(article.getCategoryId());
-                        String name = category.getName();
-                        //把分类名称设置给 article
-                        article.setCategoryName(name);
-                        return article;
-                    }
-                }).collect(Collectors.toList());*/
-        //根据 articleId 去查询 articleName 进行设置
-        /* for (Article article : articles) {
-            Category category = categoryService.getById(article.getCategoryId());
-            article.setCategoryName(category.getName());
-        }*/
 
         //封装查询结果
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
