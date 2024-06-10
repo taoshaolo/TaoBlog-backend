@@ -13,6 +13,7 @@ import com.taoshao.mapper.CommentMapper;
 import com.taoshao.service.CommentService;
 import com.taoshao.service.UserService;
 import com.taoshao.utils.BeanCopyUtils;
+import com.taoshao.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,6 +23,7 @@ import java.util.List;
 import static com.taoshao.constants.SystemConstants.ARTICLE_COMMENT;
 import static com.taoshao.constants.SystemConstants.ROOT_COMMENT;
 import static com.taoshao.domain.enums.AppHttpCodeEnum.CONTENT_NOT_NULL;
+import static com.taoshao.domain.enums.AppHttpCodeEnum.SYSTEM_ERROR;
 
 /**
  * 评论表(Comment)表服务实现类
@@ -40,14 +42,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //查询对应文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         //对 articleId 进行判断， commentType = 0 时
-        queryWrapper.eq(ARTICLE_COMMENT.equals(commentType),Comment::getArticleId, articleId);
+        queryWrapper.eq(ARTICLE_COMMENT.equals(commentType), Comment::getArticleId, articleId);
         //根评论 rootId 为 -1
         queryWrapper.eq(Comment::getRootId, ROOT_COMMENT);
         //根评论降序排序
         queryWrapper.orderByDesc(Comment::getCreateTime);
 
         //评论类型
-        queryWrapper.eq(Comment::getType,commentType);
+        queryWrapper.eq(Comment::getType, commentType);
 
         //分页查询
         Page<Comment> page = new Page<>(pageNum, pageSize);
@@ -69,9 +71,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public ResponseResult addComment(Comment comment) {
         //评论内容不能为空
-//        if (StringUtils.hasText(comment.getContent())){
-//            throw new SystemException(CONTENT_NOT_NULL);
-//        }
+        if (!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(CONTENT_NOT_NULL);
+        }
         save(comment);
         return ResponseResult.okResult();
     }
@@ -96,7 +98,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private List<CommentVo> toCommentVoList(List<Comment> list) {
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
         //遍历 vo 集合
-        commentVos.stream()
+        commentVos
                 .forEach(commentVo -> {
                     // 通过createBy查询用户的昵称并赋值
                     Long createBy = commentVo.getCreateBy();
@@ -108,10 +110,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                     }
 
                     // 通过toCommentUserId查询用户的昵称并赋值
-                    if (commentVo.getToCommentUserId() != ROOT_COMMENT) {
-                        Long toCommentId = commentVo.getToCommentId();
-                        if (toCommentId != null) {
-                            User toCommentUser = userService.getById(toCommentId);
+                    if (!commentVo.getToCommentUserId().equals(ROOT_COMMENT)) {
+                        Long toCommentUserId = commentVo.getToCommentUserId();
+                        if (toCommentUserId != null) {
+                            User toCommentUser = userService.getById(toCommentUserId);
                             if (toCommentUser != null) {
                                 commentVo.setToCommentUserName(toCommentUser.getNickName());
                             }
@@ -126,7 +128,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 //            //通过 toCommentUserId 查询用户的昵称并赋值
 //            //如果 toCommentUserId 不为 -1 才进行查询
 //            if (commentVo.getToCommentUserId() != ROOT_COMMENT ) {
-//                String toCommentUserName = userService.getById(commentVo.getToCommentId()).getNickName();
+//                String toCommentUserName = userService.getById(commentVo.getToCommentUserId()).getNickName();
 //                commentVo.setToCommentUserName(toCommentUserName);
 //            }
 //        }

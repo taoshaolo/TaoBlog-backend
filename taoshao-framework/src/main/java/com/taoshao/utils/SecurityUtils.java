@@ -4,12 +4,17 @@ import com.taoshao.domain.entity.LoginUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Objects;
+
 public class SecurityUtils {
     /**
      * 获取用户
      **/
     public static LoginUser getLoginUser() {
-        return (LoginUser) getAuthentication().getPrincipal();
+        if (!Objects.isNull(getAuthentication())){
+            return (LoginUser) getAuthentication().getPrincipal();
+        }
+        return null;
     }
 
     /**
@@ -20,11 +25,17 @@ public class SecurityUtils {
     }
 
     public static Boolean isAdmin() {
-        Long id = getLoginUser().getUser().getId();
-        return id != null && id.equals(1L);
+        if (!Objects.isNull(getLoginUser())) {
+            Long id = getLoginUser().getUser().getId();
+            return id != null && id.equals(1L);
+        }
+        return false;
     }
 
     public static Long getUserId() {
-        return getLoginUser().getUser().getId();
+        if (!Objects.isNull(getLoginUser())){
+            return getLoginUser().getUser().getId();
+        }
+        return null;
     }
 }

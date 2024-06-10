@@ -32,18 +32,7 @@ public class ViewCountRunner implements CommandLineRunner {
         List<Article> articles = articleMapper.selectList(null);
         Map<String, Integer> viewCountMap = articles.stream()
                 .collect(Collectors.toMap(article -> article.getId().toString(), article -> article.getViewCount().intValue()));
-/*        articles.stream()
-                .collect(Collectors.toMap(new Function<Article, String>() {
-                    @Override
-                    public String apply(Article article) {
-                        return article.getId().toString();
-                    }
-                }, new Function<Article, Integer>() {
-                    @Override
-                    public Integer apply(Article article) {
-                        return article.getViewCount().intValue();
-                    }
-                }));*/
+
         //存储到 redis 中
         redisCache.setCacheMap(ARTICLE_VIEWCOUNT_KEY,viewCountMap);
 

@@ -26,6 +26,7 @@ public class UpdateViewCountJob {
     @Autowired
     private ArticleService articleService;
 
+//    @Scheduled(cron = "0/5 * * * * ?")//测试
     @Scheduled(cron = "0 0/10 * * * ?")
     private void updateViewCount() {
         //获取 redis 中的浏览量

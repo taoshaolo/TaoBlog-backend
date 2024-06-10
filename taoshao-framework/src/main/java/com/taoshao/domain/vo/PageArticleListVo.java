@@ -44,7 +44,6 @@ public class PageArticleListVo {
     //是否允许评论 1是，0否
     private String isComment;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 }
 

@@ -32,7 +32,6 @@ public class RoleVo {
     //角色状态（0正常 1停用）
     private String status;
     //创建时间
-    @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
     //备注
